@@ -1,5 +1,6 @@
 const express = require("express");
 const router = new express.Router();
+const productModel = require("./../models/product");
 
 
 router.get("/all", (req, res) => { // root of the backend

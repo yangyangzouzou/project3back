@@ -1,42 +1,67 @@
 require("dotenv").config();
 require("./config/db_connections");
-require('./configs/passport')
-const cors = require('cors');
-
+require('./config/passport');
 
 const express = require("express");
-const app = express();
+const cors = require('cors');
+const bodyParser = require("body-parser");
 const session       = require('express-session');
 const passport      = require('passport');
+const app = express();
 
 
-app.use(session({
-    secret:"some secret goes here",
+app.use(
+  session({
+    cookie: { maxAge: 1800000 },
+    saveUninitialized: true,
     resave: true,
-    saveUninitialized: true
-  }));
+    secret: process.env.SESSION_SECRET
+  })
+);
 
 app.use(passport.initialize());
-
 app.use(passport.session());
 
-app.use(cors({
+
+const corsOptions = {
   credentials: true,
-  origin: ['http://localhost:3000']
-}));
+  origin:  process.env.REACT_DOMAIN
+}
+
+app.use(cors(corsOptions));
+
+
+
+
+app.use(bodyParser.json());
+
+const apiProduct = require("./api/product")
+const apiUser = require("./api/user")
+const auth = require ("./routes/auto-routes")
+
+
 
 app.get("/", (req, res) => { // root of the backend
     res.send("hello yang")
 })
 
-const productAPI = require("./api/productAPI");
-app.use("/api/product", productAPI);
-
-const authRoutes = require('./routes/auth-routes');
-app.use('/api', authRoutes);
+app.post("/api/user/signup", (req, res) => {
+  res.send("hello new user");
+});
 
 
-app.listen(process.env.PORT)
+
+app.use("/api/product", apiProduct);
+app.use("/api/user", apiUser);
+app.use("/auth", auth);
 
 
-module.exports = app;
+
+app.use(function handle404(req, res) {
+  res.status(404).render("page_not_found");
+});
+
+
+const listener = app.listen(process.env.PORT, () => {
+  console.log(`app started @ http://localhost:${listener.address().port}`);
+});
