@@ -3,20 +3,22 @@ const authRoutes = express.Router();
 
 const passport   = require('passport');
 const bcrypt     = require('bcryptjs');
-
+const minPasswordLength = 4;
 const User       = require('../models/user');
 
 
 authRoutes.post('/signup', (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
+    const profession = req.body.profession;
+    const email = req.body.email;
   
     if (!username || !password) {
       res.status(400).json({ message: 'Provide username and password' });
       return;
     }
 
-    if(password.length < 7){
+    if(password.length < minPasswordLength){
         res.status(400).json({ message: 'Please make your password at least 8 characters long for security purposes.' });
         return;
     }
@@ -35,14 +37,18 @@ authRoutes.post('/signup', (req, res, next) => {
   
         const salt     = bcrypt.genSaltSync(10);
         const hashPass = bcrypt.hashSync(password, salt);
+        // return console.log(salt, password)
   
         const aNewUser = new User({
-            username:username,
+            username,
+            email,
+            profession,
             password: hashPass
         });
   
         aNewUser.save(err => {
             if (err) {
+                console.log(err)
                 res.status(400).json({ message: 'Saving user to database went wrong.' });
                 return;
             }

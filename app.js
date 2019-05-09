@@ -30,35 +30,21 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
-
 app.use(bodyParser.json());
 
-const apiProduct = require("./api/product")
-const apiUser = require("./api/user")
-const auth = require ("./routes/auto-routes")
 
-
-
-app.get("/", (req, res) => { // root of the backend
-    res.send("hello yang")
+app.get("/", (req, res) => {
+  res.send("server running, oki");
 })
 
-app.post("/api/user/signup", (req, res) => {
-  res.send("hello new user");
-});
-
-
-
+const apiProduct = require("./api/product");
 app.use("/api/product", apiProduct);
-app.use("/api/user", apiUser);
-app.use("/auth", auth);
-
-
+// const apiUser = require("./api/user")
+const auth = require ("./routes/auth-routes");
+app.use(auth);
 
 app.use(function handle404(req, res) {
-  res.status(404).render("page_not_found");
+  res.status(404).send("page_not_found");
 });
 
 

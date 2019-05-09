@@ -11,7 +11,7 @@ router.get("/all", (req, res) => { // root of the backend
 
 router.post("/one", (req, res) => { // root of the backend
     // here get the value posted from the front and insert it in database
-
+    console.log("bien joué Yang", req.body)
 })
 
 
