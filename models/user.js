@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema(
     age: Number,
     profession: {
         type: String,
-        required: true
       },
     brand: {
         type: String,

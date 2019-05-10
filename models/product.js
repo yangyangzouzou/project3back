@@ -12,18 +12,23 @@ const productSchema = new Schema(
     serialNumber: {
       type: String,
     },
-    manufactureInfo: {
+    manufacturerInfo: {
       type: String
     },
     price: Number,
       rating: {
         type: String,
-        required: true
       },
-      comment: {
+    comment: {
         type: String,
       },
-    avatar: {
+    category: {
+        type: String,
+      },
+    type: {
+        type: String,
+      },
+    image: {
         type: String,
         default:
           "https://vignette.wikia.nocookie.net/ghostintheshell/images/f/fe/Laughing_man.svg/revision/latest/scale-to-width-down/300?cb=20100909044445&path-prefix=en"
