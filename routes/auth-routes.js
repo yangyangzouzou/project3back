@@ -69,6 +69,7 @@ authRoutes.post('/signup', (req, res, next) => {
 
 
 authRoutes.post('/login', (req, res, next) => {
+    console.log(req.user)
     passport.authenticate('local', (err, theUser, failureDetails) => {
         if (err) {
             res.status(500).json({ message: 'Something went wrong authenticating user' });
@@ -85,6 +86,8 @@ authRoutes.post('/login', (req, res, next) => {
                 res.status(500).json({ message: 'Session save went bad.' });
                 return;
             }
+            console.log(theUser);
+            
             res.status(200).json(theUser);
         });
     })(req, res, next);
@@ -98,6 +101,7 @@ authRoutes.post('/logout', (req, res, next) => {
 
 
 authRoutes.get('/loggedin', (req, res, next) => {
+    console.log(req.user)
     if (req.isAuthenticated()) {
         res.status(200).json(req.user);
         return;
