@@ -1,66 +1,73 @@
 const express = require("express");
 const router = new express.Router();
 const productModel = require("./../models/product");
-const multerParser = require( "./../config/fileupload");
+const multerParser = require("./../config/fileupload");
 
-router.post("/", multerParser.single("image"), (req, res) => { // root of the backend
-    // here get the value posted from the front and insert it in database
-    const { productBrand, serialNumber, manufacturerInfo, price, category, rating,type,comment, isFrontPage } = req.body;
+router.post("/", multerParser.single("image"), (req, res) => {
+  const { productBrand, serialNumber, manufacturerInfo, price, category, rating, type, comment, isFrontPage } = req.body;
 
-    // return console.log(req.file);
 
-    const product = {
-        productBrand,
-        serialNumber,
-        manufacturerInfo,
-        price,
-        category,
-        rating,
-        type,
-        comment,
-        isFrontPage,
-        image: req.file ? req.file.secure_url : ""
-    }
 
-    // return console.log(product);
+  const product = {
+    productBrand,
+    serialNumber,
+    manufacturerInfo,
+    price,
+    category,
+    rating,
+    type,
+    comment,
+    isFrontPage,
+    image: req.file ? req.file.secure_url : ""
+  }
 
-    productModel.create(product)
-        .then(dbSuccess => res.status(200).json(dbSuccess))
-        .catch(err => res.status(500).json(err))
+
+
+  productModel.create(product)
+    .then(dbSuccess => res.status(200).json(dbSuccess))
+    .catch(err => res.status(500).json(err))
 })
 
-router.get("/all", (req, res) => { // root of the backend
-    // here fetch all products in database
-    productModel.find()
-        .then(products => {
-            console.log(products);
-            res.json(products)
-        })
-    // res.json([{productBrand: "BB cream"}, {serialNumber: "n324"}, {manufactureInfo: "France"}, {price: 32}])
+router.get("/all", (req, res) => {
+  productModel.find()
+    .then(products => {
+      console.log(products);
+      res.json(products)
+    })
+
 })
 
 //edit
 router.get("/:id", (req, res) => {
-    productModel
-      .findById(req.params.id).populate("category")
-      .then(product => res.status(200).json(product))
-      .catch(dbErr => res.status(500).json(dbErr));
-  });
+  productModel
+    .findById(req.params.id)
+    .then(product => res.status(200).json(product))
+    .catch(dbErr => res.status(500).json(dbErr));
+});
 
 
 router.delete("/:id", (req, res) => {
-    productModel
-      .findOneAndDelete({ _id: req.params.id })
-      .then(dbRes => res.status(200).json(dbRes))
-      .catch(dbErr => {
-        console.log(dbErr);
-        res.status(500).json(dbErr);
-      });
-  });
-  
-  module.exports = router;
+  productModel
+    .findOneAndDelete({ _id: req.params.id })
+    .then(dbRes => res.status(200).json(dbRes))
+    .catch(dbErr => {
+      console.log(dbErr);
+      res.status(500).json(dbErr);
+    });
+});
 
 
-
+router.post("/edit/:id", (req, res) => {
+  productModel
+    .findByIdAndUpdate(req.params.id, req.body)
+    .then(dbRes => res.status(200).json(dbRes))
+    .catch(dbErr => {
+      console.log(dbErr);
+      res.status(500).json(dbErr);
+    });
+});
 
 module.exports = router;
+
+
+
