@@ -5,8 +5,8 @@ require('./config/passport');
 const express = require("express");
 const cors = require('cors');
 const bodyParser = require("body-parser");
-const session       = require('express-session');
-const passport      = require('passport');
+const session = require('express-session');
+const passport = require('passport');
 const app = express();
 
 
@@ -25,7 +25,7 @@ app.use(passport.session());
 
 const corsOptions = {
   credentials: true,
-  origin:  process.env.REACT_DOMAIN
+  origin: process.env.REACT_DOMAIN
 }
 
 app.use(cors(corsOptions));
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 const apiProduct = require("./api/product");
 app.use("/api/product", apiProduct);
 // const apiUser = require("./api/user")
-const auth = require ("./routes/auth-routes");
+const auth = require("./routes/auth-routes");
 app.use(auth);
 
 app.use(function handle404(req, res) {
@@ -51,3 +51,6 @@ app.use(function handle404(req, res) {
 const listener = app.listen(process.env.PORT, () => {
   console.log(`app started @ http://localhost:${listener.address().port}`);
 });
+
+
+// ready to deploy
