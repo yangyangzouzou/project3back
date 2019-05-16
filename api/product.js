@@ -60,9 +60,9 @@ router.delete("/:id", (req, res) => {
 router.post("/edit/:id", (req, res) => {
   productModel
     .findByIdAndUpdate(req.params.id, req.body)
-    .then(dbRes => res.status(200).json(dbRes))
+    .then(dbRes => console.log("ITEM CHANGES", dbRes))
     .catch(dbErr => {
-      console.log(dbErr);
+      res.status(200).json(dbRes);
       res.status(500).json(dbErr);
     });
 });
